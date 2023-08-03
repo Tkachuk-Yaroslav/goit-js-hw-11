@@ -125,7 +125,7 @@ function addCardsMurkup(cards) {
 </div>
         `
     })
-    refs.gallaryContainerEl.insertAdjacentHTML('beforeend', murkup.join());
+    refs.gallaryContainerEl.insertAdjacentHTML('beforeend', murkup.join(''));
     
 }
 
