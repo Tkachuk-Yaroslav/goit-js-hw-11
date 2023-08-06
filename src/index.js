@@ -106,7 +106,7 @@ function handleLoadMore() {
 function addCardsMurkup(cards) {
     const murkup = cards.map(({webformatURL, largeImageURL, tags, likes, comments, views, downloads}) => {
         return `
-        <div class="photo-card">
+       <div class="photo-card">
   <img src="${webformatURL}" alt="" loading="lazy" />
   <div class="info">
     <p class="info-item">
