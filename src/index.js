@@ -81,7 +81,10 @@ function handleSearchForm(event) {
         // refs.gallaryContainerEl.insertAdjacentHTML('beforeend', murkup.join());
         
         addCardsMurkup(cards);
-    }).catch(err => console.log(err));
+    }).catch(err => {
+        alert('Ooop something went wrong!')
+        console.log(err)
+    });
 }
 
 function handleLoadMore() {
@@ -123,7 +126,10 @@ function handleLoadMore() {
             refs.loadMoreBtnEl.classList.add("is-hidden");
         }
         
-    }).catch(err => console.log(err));
+    }).catch(err => {
+        alert('Ooop something went wrong!')
+        console.log(err)
+    });
     
 
 }
