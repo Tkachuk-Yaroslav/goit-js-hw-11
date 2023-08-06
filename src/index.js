@@ -15,6 +15,8 @@ const refs = {
     gallaryContainerEl: document.querySelector(".gallery")
 }
 
+
+
 //початково кнопка скрита
 refs.loadMoreBtnEl.classList.add("is-hidden");
 
@@ -81,6 +83,14 @@ function handleSearchForm(event) {
         // refs.gallaryContainerEl.insertAdjacentHTML('beforeend', murkup.join());
         
         addCardsMurkup(cards);
+        const { height: cardHeight } = document
+  .querySelector(".gallery")
+  .firstElementChild.getBoundingClientRect();
+
+window.scrollBy({
+  top: cardHeight * 2,
+  behavior: "smooth",
+});
     }).catch(err => {
         alert('Ooop something went wrong!')
         console.log(err)
@@ -119,7 +129,14 @@ function handleLoadMore() {
         refs.loadMoreBtnEl.removeAttribute('disabled');
         
         addCardsMurkup(cards);
+        const { height: cardHeight } = document
+  .querySelector(".gallery")
+  .firstElementChild.getBoundingClientRect();
 
+window.scrollBy({
+  top: cardHeight * 2,
+  behavior: "smooth",
+});
         console.log('те що я хочу', cards)
         if (cards.length < 40) {
             alert("We're sorry, but you've reached the end of search results.");
