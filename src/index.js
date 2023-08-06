@@ -1,7 +1,8 @@
 
 import axios from "axios";
 import PixabayApiService from "./js/api-servise";
-
+// import { Notify } from "notiflix";
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const API_KEY = '38626503-0c946b31d6d08b2c506c34012';
 const BASE_URL = 'https://pixabay.com/api/';
