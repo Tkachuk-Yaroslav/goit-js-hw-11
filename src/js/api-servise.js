@@ -13,7 +13,13 @@ export default class PixabayApiService {
         .then((response) => response.json())
             .then(data => {
                 console.log(data)
+                // if (data.totalHits <= this.page * 40) {
+                //     const loadBtn = document.querySelector('.load-more');
+                //     loadBtn.classList.add("is-hidden");
+                //     alert("We're sorry, but you've reached the end of search results.")
+                // }
                 this.page += 1
+                
                 return data.hits;
             })
 

@@ -15,6 +15,9 @@ const refs = {
     gallaryContainerEl: document.querySelector(".gallery")
 }
 
+//початково кнопка скрита
+refs.loadMoreBtnEl.classList.add("is-hidden");
+
 const pixabayApiService = new PixabayApiService();
 
 console.log(refs.formEl);
@@ -30,7 +33,14 @@ function handleSearchForm(event) {
     event.preventDefault();
     clearGallaryContainer();
     // formSearchQuery = event.currentTarget.elements.searchQuery.value;
-    pixabayApiService.query = event.currentTarget.elements.searchQuery.value;
+    pixabayApiService.query = event.currentTarget.elements.searchQuery.value.trim();
+
+    if (pixabayApiService.query === '') {
+        return alert("Потрібно щось ввести!");
+    }
+    // refs.loadMoreBtnEl.classList.remove("is-hidden");
+    // refs.loadMoreBtnEl.setAttribute('disabled', true);
+
     pixabayApiService.resetPage();
     // console.log(formSearchQuery)
 
@@ -40,7 +50,13 @@ function handleSearchForm(event) {
 
     pixabayApiService.fetchCards().then((cards) => {
         console.log('це воно', cards)
+        if (!cards.length) {
+            refs.loadMoreBtnEl.classList.add("is-hidden");
+            return alert("Sorry, there are no images matching your search query. Please try again.")
+        }
         
+        refs.loadMoreBtnEl.removeAttribute('disabled');
+        refs.loadMoreBtnEl.classList.remove("is-hidden");
         // const murkup = cards.map(({webformatURL, largeImageURL, tags, likes, comments, views, downloads}) => {
         // return `
         // <div class="photo-card">
@@ -65,13 +81,14 @@ function handleSearchForm(event) {
         // refs.gallaryContainerEl.insertAdjacentHTML('beforeend', murkup.join());
         
         addCardsMurkup(cards);
-    });
+    }).catch(err => console.log(err));
 }
 
 function handleLoadMore() {
     // fetch(${BASE_URL}/?key=${API_KEY}&q=${formSearchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=1)
     //     .then((response) => response.json())
     //     .then(console.log)
+    refs.loadMoreBtnEl.setAttribute('disabled', true);
 
     pixabayApiService.fetchCards().then(cards => {
         // const murkup = cards.map(({webformatURL, largeImageURL, tags, likes, comments, views, downloads}) => {
@@ -96,9 +113,17 @@ function handleLoadMore() {
         //     `
         // })
         // refs.gallaryContainerEl.insertAdjacentHTML('beforeend', murkup.join());
+        refs.loadMoreBtnEl.removeAttribute('disabled');
         
         addCardsMurkup(cards);
-    });
+
+        console.log('те що я хочу', cards)
+        if (cards.length < 40) {
+            alert("We're sorry, but you've reached the end of search results.");
+            refs.loadMoreBtnEl.classList.add("is-hidden");
+        }
+        
+    }).catch(err => console.log(err));
     
 
 }
