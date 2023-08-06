@@ -1,12 +1,11 @@
-// import PixabayApiService from "../js/api-service";
+
 import axios from "axios";
 import PixabayApiService from "./js/api-servise";
 
-console.log('hello')
 
 const API_KEY = '38626503-0c946b31d6d08b2c506c34012';
 const BASE_URL = 'https://pixabay.com/api/';
-// let formSearchQuery = '';
+
 
 const refs = {
     formEl: document.querySelector("form"),
@@ -15,8 +14,6 @@ const refs = {
     loadMoreBtnEl: document.querySelector(".load-more"),
     gallaryContainerEl: document.querySelector(".gallery")
 }
-
-
 
 //початково кнопка скрита
 refs.loadMoreBtnEl.classList.add("is-hidden");
@@ -39,8 +36,7 @@ function handleSearchForm(event) {
     pixabayApiService.query = event.currentTarget.elements.searchQuery.value.trim();
 
     if (pixabayApiService.query === '') {
-refs.loadMoreBtnEl.classList.add("is-hidden");
-
+        refs.loadMoreBtnEl.classList.add("is-hidden");
         return alert("Потрібно щось ввести!");
     }
     // refs.loadMoreBtnEl.classList.remove("is-hidden");
@@ -137,13 +133,13 @@ function handleLoadMore() {
         
         addCardsMurkup(cards);
         const { height: cardHeight } = document
-  .querySelector(".gallery")
-  .firstElementChild.getBoundingClientRect();
+        .querySelector(".gallery")
+        .firstElementChild.getBoundingClientRect();
 
-window.scrollBy({
-  top: cardHeight * 2,
-  behavior: "smooth",
-});
+        window.scrollBy({
+        top: cardHeight * 2,
+        behavior: "smooth",
+        });
         console.log('те що я хочу', cards)
         if (cards.length < 40) {
             alert("We're sorry, but you've reached the end of search results.");
