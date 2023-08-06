@@ -1,4 +1,5 @@
 // import PixabayApiService from "../js/api-service";
+import axios from "axios";
 import PixabayApiService from "./js/api-servise";
 
 console.log('hello')
@@ -38,6 +39,8 @@ function handleSearchForm(event) {
     pixabayApiService.query = event.currentTarget.elements.searchQuery.value.trim();
 
     if (pixabayApiService.query === '') {
+refs.loadMoreBtnEl.classList.add("is-hidden");
+
         return alert("Потрібно щось ввести!");
     }
     // refs.loadMoreBtnEl.classList.remove("is-hidden");
@@ -84,13 +87,17 @@ function handleSearchForm(event) {
         
         addCardsMurkup(cards);
         const { height: cardHeight } = document
-  .querySelector(".gallery")
-  .firstElementChild.getBoundingClientRect();
+            .querySelector(".gallery")
+            .firstElementChild.getBoundingClientRect();
 
-window.scrollBy({
-  top: cardHeight * 2,
-  behavior: "smooth",
-});
+            window.scrollBy({
+            top: cardHeight * 2,
+            behavior: "smooth",
+            });
+        if (cards.length < 40) {
+            alert("We're sorry, but you've reached the end of search results.");
+            refs.loadMoreBtnEl.classList.add("is-hidden");
+        }
     }).catch(err => {
         alert('Ooop something went wrong!')
         console.log(err)
