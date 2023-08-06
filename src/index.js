@@ -38,7 +38,7 @@ function handleSearchForm(event) {
 
     if (pixabayApiService.query === '') {
         refs.loadMoreBtnEl.classList.add("is-hidden");
-        return alert("Потрібно щось ввести!");
+        return Notify.failure('Потрібно щось ввести!');
     }
     // refs.loadMoreBtnEl.classList.remove("is-hidden");
     // refs.loadMoreBtnEl.setAttribute('disabled', true);
@@ -54,7 +54,7 @@ function handleSearchForm(event) {
         console.log('це воно', cards)
         if (!cards.length) {
             refs.loadMoreBtnEl.classList.add("is-hidden");
-            return alert("Sorry, there are no images matching your search query. Please try again.")
+            return Notify.failure('Sorry, there are no images matching your search query. Please try again.');
         }
         
         refs.loadMoreBtnEl.removeAttribute('disabled');
@@ -92,11 +92,11 @@ function handleSearchForm(event) {
             behavior: "smooth",
             });
         if (cards.length < 40) {
-            alert("We're sorry, but you've reached the end of search results.");
+            Notify.failure("We're sorry, but you've reached the end of search results.");
             refs.loadMoreBtnEl.classList.add("is-hidden");
         }
     }).catch(err => {
-        alert('Ooop something went wrong!')
+        Notify.failure('Ooop something went wrong!')
         console.log(err)
     });
 }
@@ -143,12 +143,12 @@ function handleLoadMore() {
         });
         console.log('те що я хочу', cards)
         if (cards.length < 40) {
-            alert("We're sorry, but you've reached the end of search results.");
+            Notify.failure("We're sorry, but you've reached the end of search results.");
             refs.loadMoreBtnEl.classList.add("is-hidden");
         }
         
     }).catch(err => {
-        alert('Ooop something went wrong!')
+        Notify.failure('Ooop something went wrong!')
         console.log(err)
     });
     
