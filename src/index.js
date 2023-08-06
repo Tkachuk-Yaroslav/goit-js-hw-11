@@ -1,7 +1,5 @@
-
 import axios from "axios";
 import PixabayApiService from "./js/api-servise";
-// import { Notify } from "notiflix";
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const API_KEY = '38626503-0c946b31d6d08b2c506c34012';
@@ -30,7 +28,7 @@ console.log(refs.gallaryContainerEl);
 refs.formEl.addEventListener('submit', handleSearchForm);
 refs.loadMoreBtnEl.addEventListener('click', handleLoadMore);
 
-function handleSearchForm(event) {
+async function handleSearchForm(event) {
     event.preventDefault();
     clearGallaryContainer();
     // formSearchQuery = event.currentTarget.elements.searchQuery.value;
@@ -49,108 +47,142 @@ function handleSearchForm(event) {
     // fetch(${BASE_URL}/?key=${API_KEY}&q=${formSearchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=1)
     //     .then((response) => response.json())
     //     .then(console.log)
-
-    pixabayApiService.fetchCards().then((cards) => {
-        console.log('це воно', cards)
-        if (!cards.length) {
+    try {
+        const result = await pixabayApiService.fetchCards();
+        console.log('RESULT', result)
+        if (!result.length) {
             refs.loadMoreBtnEl.classList.add("is-hidden");
             return Notify.failure('Sorry, there are no images matching your search query. Please try again.');
         }
-        
         refs.loadMoreBtnEl.removeAttribute('disabled');
         refs.loadMoreBtnEl.classList.remove("is-hidden");
-        // const murkup = cards.map(({webformatURL, largeImageURL, tags, likes, comments, views, downloads}) => {
-        // return `
-        // <div class="photo-card">
-        // <img src="${webformatURL}" alt="" loading="lazy" />
-        // <div class="info">
-        //     <p class="info-item">
-        //     <b>Likes ${likes}</b>
-        //     </p>
-        //     <p class="info-item">
-        //     <b>Views ${views}</b>
-        //     </p>
-        //     <p class="info-item">
-        //     <b>Comments ${comments}</b>
-        //     </p>
-        //     <p class="info-item">
-        //     <b>Downloads ${downloads}</b>
-        //     </p>
-        //     </div>
-        //     </div>
-        //     `
-        // })
-        // refs.gallaryContainerEl.insertAdjacentHTML('beforeend', murkup.join());
-        
-        addCardsMurkup(cards);
+        addCardsMurkup(result);
         const { height: cardHeight } = document
-            .querySelector(".gallery")
-            .firstElementChild.getBoundingClientRect();
+        .querySelector(".gallery")
+        .firstElementChild.getBoundingClientRect();
 
-            window.scrollBy({
-            top: cardHeight * 2,
-            behavior: "smooth",
-            });
-        if (cards.length < 40) {
-            Notify.failure("We're sorry, but you've reached the end of search results.");
-            refs.loadMoreBtnEl.classList.add("is-hidden");
+     window.scrollBy({
+        top: cardHeight * 2,
+        behavior: "smooth",
+     });
+    
+        if (result.length < 40) {
+        Notify.failure("We're sorry, but you've reached the end of search results.");
+        refs.loadMoreBtnEl.classList.add("is-hidden");
         }
-    }).catch(err => {
+    } catch(err) {
         Notify.failure('Ooop something went wrong!')
         console.log(err)
-    });
+    };
+    
+
+
+
+    // pixabayApiService.fetchCards().then((cards) => {
+    //     console.log('це воно', cards)
+    //     if (!cards.length) {
+    //         refs.loadMoreBtnEl.classList.add("is-hidden");
+    //         return Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+    //     }
+        
+    //     refs.loadMoreBtnEl.removeAttribute('disabled');
+    //     refs.loadMoreBtnEl.classList.remove("is-hidden");
+    //     // const murkup = cards.map(({webformatURL, largeImageURL, tags, likes, comments, views, downloads}) => {
+    //     // return `
+    //     // <div class="photo-card">
+    //     // <img src="${webformatURL}" alt="" loading="lazy" />
+    //     // <div class="info">
+    //     //     <p class="info-item">
+    //     //     <b>Likes ${likes}</b>
+    //     //     </p>
+    //     //     <p class="info-item">
+    //     //     <b>Views ${views}</b>
+    //     //     </p>
+    //     //     <p class="info-item">
+    //     //     <b>Comments ${comments}</b>
+    //     //     </p>
+    //     //     <p class="info-item">
+    //     //     <b>Downloads ${downloads}</b>
+    //     //     </p>
+    //     //     </div>
+    //     //     </div>
+    //     //     `
+    //     // })
+    //     // refs.gallaryContainerEl.insertAdjacentHTML('beforeend', murkup.join());
+        
+    //     addCardsMurkup(cards);
+    //     const { height: cardHeight } = document
+    //         .querySelector(".gallery")
+    //         .firstElementChild.getBoundingClientRect();
+
+    //         window.scrollBy({
+    //         top: cardHeight * 2,
+    //         behavior: "smooth",
+    //         });
+    //     if (cards.length < 40) {
+    //         Notify.failure("We're sorry, but you've reached the end of search results.");
+    //         refs.loadMoreBtnEl.classList.add("is-hidden");
+    //     }
+    // }).catch(err => {
+    //     Notify.failure('Ooop something went wrong!')
+    //     console.log(err)
+    // });
 }
 
-function handleLoadMore() {
+async function handleLoadMore() {
     // fetch(${BASE_URL}/?key=${API_KEY}&q=${formSearchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=1)
     //     .then((response) => response.json())
     //     .then(console.log)
     refs.loadMoreBtnEl.setAttribute('disabled', true);
 
-    pixabayApiService.fetchCards().then(cards => {
-        // const murkup = cards.map(({webformatURL, largeImageURL, tags, likes, comments, views, downloads}) => {
-        // return `
-        // <div class="photo-card">
-        // <img src="${webformatURL}" alt="" loading="lazy" />
-        // <div class="info">
-        //     <p class="info-item">
-        //     <b>Likes ${likes}</b>
-        //     </p>
-        //     <p class="info-item">
-        //     <b>Views ${views}</b>
-        //     </p>
-        //     <p class="info-item">
-        //     <b>Comments ${comments}</b>
-        //     </p>
-        //     <p class="info-item">
-        //     <b>Downloads ${downloads}</b>
-        //     </p>
-        //     </div>
-        //     </div>
-        //     `
-        // })
-        // refs.gallaryContainerEl.insertAdjacentHTML('beforeend', murkup.join());
+    try {
+        const result = await pixabayApiService.fetchCards();
         refs.loadMoreBtnEl.removeAttribute('disabled');
-        
-        addCardsMurkup(cards);
+        addCardsMurkup(result);
+
         const { height: cardHeight } = document
-        .querySelector(".gallery")
-        .firstElementChild.getBoundingClientRect();
+            .querySelector(".gallery")
+            .firstElementChild.getBoundingClientRect();
 
         window.scrollBy({
-        top: cardHeight * 2,
-        behavior: "smooth",
+            top: cardHeight * 2,
+            behavior: "smooth",
         });
-        console.log('те що я хочу', cards)
-        if (cards.length < 40) {
+
+        if (result.length < 40) {
             Notify.failure("We're sorry, but you've reached the end of search results.");
             refs.loadMoreBtnEl.classList.add("is-hidden");
         }
-        
-    }).catch(err => {
+
+    } catch(err){
         Notify.failure('Ooop something went wrong!')
         console.log(err)
-    });
+     };
+
+
+
+    // pixabayApiService.fetchCards().then(cards => {
+    //     refs.loadMoreBtnEl.removeAttribute('disabled');
+        
+    //     addCardsMurkup(cards);
+    //     const { height: cardHeight } = document
+    //     .querySelector(".gallery")
+    //     .firstElementChild.getBoundingClientRect();
+
+    //     window.scrollBy({
+    //     top: cardHeight * 2,
+    //     behavior: "smooth",
+    //     });
+    //     console.log('те що я хочу', cards)
+    //     if (cards.length < 40) {
+    //         Notify.failure("We're sorry, but you've reached the end of search results.");
+    //         refs.loadMoreBtnEl.classList.add("is-hidden");
+    //     }
+        
+    // }).catch(err => {
+    //     Notify.failure('Ooop something went wrong!')
+    //     console.log(err)
+    // });
     
 
 }
