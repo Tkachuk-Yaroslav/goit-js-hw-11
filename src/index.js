@@ -6,6 +6,8 @@ import SimpleLightbox from "simplelightbox";
 // Додатковий імпорт стилів
 import "simplelightbox/dist/simple-lightbox.min.css";
 
+let gallery = new SimpleLightbox('.gallery a');
+
 const API_KEY = '38626503-0c946b31d6d08b2c506c34012';
 const BASE_URL = 'https://pixabay.com/api/';
 
@@ -65,6 +67,7 @@ async function handleSearchForm(event) {
         refs.loadMoreBtnEl.removeAttribute('disabled');
         refs.loadMoreBtnEl.classList.remove("is-hidden");
         addCardsMurkup(result.hits);
+        gallery.refresh();
         const { height: cardHeight } = document
         .querySelector(".gallery")
         .firstElementChild.getBoundingClientRect();
@@ -199,7 +202,9 @@ function addCardsMurkup(cards) {
     const murkup = cards.map(({webformatURL, largeImageURL, tags, likes, comments, views, downloads}) => {
         return `
        <div class="photo-card">
+       <a class="gallery-link" href="${largeImageURL}">
   <img src="${webformatURL}" alt="" loading="lazy" />
+  </a>
   <div class="info">
     <p class="info-item">
       <b>Likes ${likes}</b>
