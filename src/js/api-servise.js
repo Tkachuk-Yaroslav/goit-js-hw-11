@@ -10,7 +10,7 @@ export default class PixabayApiService {
         console.log(this);
         const API_KEY = '38626503-0c946b31d6d08b2c506c34012';
         const BASE_URL = 'https://pixabay.com/api/';
-        
+
         //було через фетч
         // return fetch(`${BASE_URL}/?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${this.page}`)
         // .then((response) => response.json())
@@ -31,7 +31,8 @@ export default class PixabayApiService {
         //стало через аксіос
         const response = await axios.get(`${BASE_URL}/?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${this.page}`);
         this.page += 1;
-        return response.data.hits;
+        // return response.data.hits;
+        return response.data;
 
 
 

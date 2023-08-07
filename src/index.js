@@ -50,13 +50,17 @@ async function handleSearchForm(event) {
     try {
         const result = await pixabayApiService.fetchCards();
         console.log('RESULT', result)
-        if (!result.length) {
+        if (!result.hits.length) {
             refs.loadMoreBtnEl.classList.add("is-hidden");
             return Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+        } else {
+            Notify.success(`Hooray! We found ${result.totalHits} images.`);
+            // alert(`Hooray! We found ${result.totalHits} images.`)
+            // console.log(result)
         }
         refs.loadMoreBtnEl.removeAttribute('disabled');
         refs.loadMoreBtnEl.classList.remove("is-hidden");
-        addCardsMurkup(result);
+        addCardsMurkup(result.hits);
         const { height: cardHeight } = document
         .querySelector(".gallery")
         .firstElementChild.getBoundingClientRect();
@@ -66,8 +70,8 @@ async function handleSearchForm(event) {
         behavior: "smooth",
      });
     
-        if (result.length < 40) {
-        Notify.failure("We're sorry, but you've reached the end of search results.");
+        if (result.hits.length < 40) {
+        // Notify.failure("We're sorry, but you've reached the end of search results.");
         refs.loadMoreBtnEl.classList.add("is-hidden");
         }
     } catch(err) {
@@ -138,7 +142,7 @@ async function handleLoadMore() {
     try {
         const result = await pixabayApiService.fetchCards();
         refs.loadMoreBtnEl.removeAttribute('disabled');
-        addCardsMurkup(result);
+        addCardsMurkup(result.hits);
 
         const { height: cardHeight } = document
             .querySelector(".gallery")
@@ -149,7 +153,7 @@ async function handleLoadMore() {
             behavior: "smooth",
         });
 
-        if (result.length < 40) {
+        if (result.hits.length < 40) {
             Notify.failure("We're sorry, but you've reached the end of search results.");
             refs.loadMoreBtnEl.classList.add("is-hidden");
         }
