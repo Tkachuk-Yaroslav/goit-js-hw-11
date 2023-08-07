@@ -1,6 +1,10 @@
 import axios from "axios";
 import PixabayApiService from "./js/api-servise";
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+// Описаний в документації
+import SimpleLightbox from "simplelightbox";
+// Додатковий імпорт стилів
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const API_KEY = '38626503-0c946b31d6d08b2c506c34012';
 const BASE_URL = 'https://pixabay.com/api/';
