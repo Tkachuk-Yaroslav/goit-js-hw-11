@@ -150,14 +150,15 @@ async function handleLoadMore() {
         const result = await pixabayApiService.fetchCards();
         refs.loadMoreBtnEl.removeAttribute('disabled');
         console.log('Це handleLoadMore резалт', result);
-        const maxPage = Math.ceil(result.totalHits / 40);
-        if (maxPage === pixabayApiService.page - 1) {
-            refs.loadMoreBtnEl.setAttribute('disabled', true);
-            refs.loadMoreBtnEl.classList.add("is-hidden");
-            Notify.failure("We're sorry, but you've reached the end of search results.");
+        // const maxPage = Math.ceil(result.totalHits / 40);
+        // if (maxPage === pixabayApiService.page - 1) {
+        //     refs.loadMoreBtnEl.setAttribute('disabled', true);
+        //     refs.loadMoreBtnEl.classList.add("is-hidden");
+        //     Notify.failure("We're sorry, but you've reached the end of search results.");
             
-        }
-        console.log(maxPage)
+        // }
+        calcMaxPage(result)
+        // console.log(maxPage)
         addCardsMurkup(result.hits);
         gallery.refresh();
 
@@ -238,4 +239,14 @@ function addCardsMurkup(cards) {
 
 function clearGallaryContainer() {
     refs.gallaryContainerEl.innerHTML = '';
+}
+
+function calcMaxPage(arrOfDataPromise) {
+      const maxPage = Math.ceil(arrOfDataPromise.totalHits / 40);
+        if (maxPage === pixabayApiService.page - 1) {
+            refs.loadMoreBtnEl.setAttribute('disabled', true);
+            refs.loadMoreBtnEl.classList.add("is-hidden");
+            Notify.failure("We're sorry, but you've reached the end of search results.");
+            
+        }
 }
