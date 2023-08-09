@@ -150,6 +150,7 @@ async function handleLoadMore() {
         const result = await pixabayApiService.fetchCards();
         refs.loadMoreBtnEl.removeAttribute('disabled');
         addCardsMurkup(result.hits);
+        gallery.refresh();
 
         const { height: cardHeight } = document
             .querySelector(".gallery")
